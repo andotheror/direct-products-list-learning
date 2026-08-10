@@ -1,0 +1,236 @@
+\documentclass[twoside]{article}
+
+\usepackage[preprint]{aistats2027}
+\usepackage[round,authoryear]{natbib}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{url}
+
+\renewcommand{\bibname}{References}
+\renewcommand{\bibsection}{\subsubsection*{\bibname}}
+\bibliographystyle{apalike}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\renewcommand{\thetheorem}{S\arabic{theorem}}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Prb}{\mathbb P}
+\newcommand{\DS}{\operatorname{DS}}
+\newcommand{\G}{\operatorname{G}}
+\newcommand{\VC}{\operatorname{VC}}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\ot}{\mathbin\otimes}
+
+\begin{document}
+\runningauthor{}
+
+\twocolumn[
+\aistatstitle{Supplement to ``Direct Products in List Learning''}
+\aistatsauthor{Pahan Dewasurendra}
+\aistatsaddress{Johns Hopkins University}
+]
+
+\appendix
+
+\section{List-Threshold Details}
+\label{app:list}
+
+As in the main paper, all domains and concept classes are nonempty. We use lists of size at most $k$, while \citet{hanneke2024list} state definitions using exactly $k$ labels. These conventions are equivalent for threshold questions. If a rule returns fewer than $k$ labels, pad its output by arbitrary labels. Whenever the label space has fewer than $k$ elements, the class is already trivially learnable with a smaller list, so this case cannot obstruct a lower bound at $k$.
+
+We first record the projection argument used for thresholds one and infinity.
+
+\begin{lemma}[Projection]\label{lem:projection}
+Let $\cC_j\subseteq Y_j^{X_j}$ be nonempty. If $\bigotimes_{j=1}^r\cC_j$ is $k$-list PAC learnable, then every factor $\cC_j$ is $k$-list PAC learnable. More generally, every subproduct is $k$-list PAC learnable.
+\end{lemma}
+
+\begin{proof}
+It is enough to project onto one factor. Fix $j$, concepts $c_\ell^0\in\cC_\ell$, and inputs $x_\ell^0\in X_\ell$ for all $\ell\neq j$. Given a labeled sample $S=((x_t,y_t))_{t=1}^n$ for factor $j$, construct the product sample whose $t$th input has coordinate $x_t$ at $j$ and $x_\ell^0$ elsewhere, and whose label is $y_t$ at $j$ and $c_\ell^0(x_\ell^0)$ elsewhere. Run the product learner. At a test input $x$, evaluate its list at the product point with coordinate $x$ at $j$ and the fixed inputs elsewhere, then project every output tuple onto coordinate $j$.
+
+The projected list has at most $k$ labels. Whenever the product list contains the true output tuple, the projected list contains the true factor-$j$ label. The projected learner therefore has no larger error for every target and distribution. Iterating the same construction projects onto any subproduct.
+\end{proof}
+
+For completeness, consider the pseudocube proof with dimensions that are not attained. If
+\[
+m<\min_j\DS_{k_j}(\cC_j),
+\]
+choose finite $k_j$-pseudocubes $P_j$ on sequences of common length $m$. Restrict the product class to the coordinatewise paired sequence. The map $P_1\times\cdots\times P_r$ into product labelings is injective because equality of every tuple label implies equality in every factor. At a fixed direction, choose the base labeling or one of $k_j$ neighbors in factor $j$. There are $\prod_j(k_j+1)$ distinct combinations. Every combination except the all-base tuple changes the paired label in that direction and nowhere else. Taking the supremum over $m$ proves the product-DS theorem for finite and infinite dimensions.
+
+Now let $J=\{j:2\leq K(\cC_j)<\infty\}$. The product over $J$ is not $(\prod_{j\in J}K(\cC_j)-1)$-list learnable by the product-DS theorem and the list-learning characterization of \citet{charikar2023}. Lemma~\ref{lem:projection} transfers this lower bound to the full product. Factors with threshold one do not change the product. If any factor has infinite threshold, the contrapositive of Lemma~\ref{lem:projection} makes the product threshold infinite. This supplies all edge cases in the exact-threshold theorem.
+
+\section{Fixed-Marginal Details}
+\label{app:fixed}
+
+\subsection{The finite minimax identity}
+
+We justify the decision-game step in the randomized theorem. For one coordinate, let $O=(S,X)$ and let $Z=c(X)$ be the test label. Since the spaces are finite, a randomized rule is equivalent for expected one-test loss to a Markov kernel $a(\cdot\mid O)$ on labels. Such a kernel can be implemented by sampling a complete prediction function after seeing $S$, independently across the finitely many test inputs.
+
+For a prior $\pi$ on the finite target class, the best conditional action is a posterior mode. Its Bayes success is
+\begin{equation}
+B(\pi)=\E_{O\sim\pi}\max_y\Prb_\pi\{Z=y\mid O\}.
+\label{eq:bayes}
+\end{equation}
+Finite minimax gives
+\begin{equation}
+V_n^{\rm rnd}(D,\cC)=\min_{\pi\in\Delta(\cC)}B(\pi).
+\label{eq:minimax}
+\end{equation}
+Choose minimizers $\pi_1,\ldots,\pi_r$. Under their product, the coordinate targets, samples, and test inputs are independent. The conditional law of $(Z_1,\ldots,Z_r)$ given $(O_1,\ldots,O_r)$ is therefore a product. Its largest atom is the product of the coordinate largest atoms. Applying \eqref{eq:bayes} and independence once more gives
+\[
+B(\pi_1\ot\cdots\ot\pi_r)=\prod_{j=1}^rB(\pi_j)=\prod_{j=1}^rV_{n,j}^{\rm rnd}.
+\]
+This product prior upper bounds every joint minimax rule. Independent coordinate rules give the reverse inequality.
+
+\subsection{General endogenous derandomization}
+\label{app:det-general}
+
+We give the full probabilistic-method proof for the class $c_b(0)=0$, $c_b(1)=b$. Fix a target vector $b\in\{0,1\}^r$. An input context records the $nr$ training inputs and $r$ test inputs, so there are
+\[
+N=2^{(n+1)r}
+\]
+equally likely contexts. Coordinate $j$ is ambiguous exactly when its $n$ training inputs are all zero and its test input is one. This occurs for one of the $2^{n+1}$ coordinate contexts, hence with probability $q=2^{-(n+1)}$.
+
+Under the uniform prior on target vectors, posterior ambiguous bits are independent and uniform. The Bayes success is therefore $(1-q/2)^r$. For any deterministic rule, each target's success is an integer multiple of $1/N$. The minimum target success cannot exceed the average under the uniform prior, which proves the refined upper bound
+\[
+V_n^{\rm det}(D^r,\cC^r)\leq\frac{\lfloor N(1-q/2)^r\rfloor}{N}.
+\]
+
+Construct a random deterministic rule before any data are observed. For every possible labeled training sample and test input, output all labels determined by the observation. Independently for each such observable context, guess every remaining ambiguous target bit by a uniform bit. This random draw is a distribution over deterministic rules.
+
+For the fixed target $b$, distinct input contexts induce distinct observations because the inputs themselves are observed. Their success indicators $Z_1,\ldots,Z_N$ are therefore independent under the random draw of the rule. If a context has $a$ ambiguous coordinates, its expected success is $2^{-a}$. Averaging over one coordinate gives
+\[
+\frac{(2^{n+1}-1)\cdot1+1\cdot(1/2)}{2^{n+1}}=1-\frac{q}{2}.
+\]
+Independence of the coordinate input contexts then gives
+\[
+\E\left[\frac1N\sum_{i=1}^NZ_i\right]=(1-q/2)^r=:\mu_r.
+\]
+Hoeffding's inequality yields, for every $t>0$,
+\[
+\Prb\left\{\frac1N\sum_iZ_i<\mu_r-t\right\}\leq e^{-2Nt^2}.
+\]
+Take
+\[
+t=\sqrt{\frac{(r+1)\log2}{2N}}.
+\]
+A union bound over the $2^r$ target vectors has failure probability at most $2^re^{-(r+1)\log2}=1/2$. Thus some deterministic rule simultaneously has success at least $\mu_r-t$ against every target.
+
+The additive term is negligible on the exponential scale. For $n=0$,
+\[
+-\log(1-q/2)=-\log(3/4)<\frac{\log2}{2}.
+\]
+For $n\geq1$, the left side is at most $q/(2-q)\leq1/7$, while $(n+1)\log2/2\geq\log2$. Hence
+\[
+\sqrt r\,2^{-(n+1)r/2}=o((1-q/2)^r),
+\]
+which proves the claimed joint success exponent.
+
+\subsection{Exact two-task table}
+
+For $n=1$, classify a coordinate's train-test input pair into four states:
+\[
+\begin{aligned}
+A&=(0,1),& B&=(0,0),\\
+C&=(1,0),& D&=(1,1).
+\end{aligned}
+\]
+In state $A$, the needed bit is unknown. In state $B$, the bit is unknown but the test label is zero. States $C$ and $D$ reveal the target bit, with test labels zero and the revealed bit respectively.
+
+The following table specifies the joint rule on the seven ambiguous state patterns. Known test labels are always output correctly. The last column gives the target condition under which the ambiguous guesses are correct.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}lll@{}}
+\toprule
+States & Ambiguous guess & Success condition \\
+\midrule
+$(A,B)$ & $\widehat b_1=0$ & $b_1=0$ \\
+$(A,C)$ & $\widehat b_1=b_2$ & $b_1=b_2$ \\
+$(A,D)$ & $\widehat b_1=1-b_2$ & $b_1=1-b_2$ \\
+$(B,A)$ & $\widehat b_2=0$ & $b_2=0$ \\
+$(C,A)$ & $\widehat b_2=b_1$ & $b_2=b_1$ \\
+$(D,A)$ & $\widehat b_2=1-b_1$ & $b_2=1-b_1$ \\
+$(A,A)$ & $(\widehat b_1,\widehat b_2)=(1,1)$ & $(b_1,b_2)=(1,1)$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The four target pairs $(0,0),(0,1),(1,0),(1,1)$ succeed on respectively $4,3,3,3$ rows. Together with the nine unambiguous state patterns, the rule has worst-target success $12/16$. For any rule, a one-ambiguous row can cover at most two target pairs and the both-ambiguous row can cover at most one. Total ambiguous coverage is at most $6\cdot2+1=13$, so some target pair succeeds on at most three ambiguous patterns. This proves optimality.
+
+\section{Graph Dimension and Uniform Convergence}
+\label{app:graph}
+
+\subsection{Graph dimension is the VC dimension of error}
+
+Recall $\cL_\cC=\{(x,y)\mapsto\mathbf1\{c(x)\neq y\}:c\in\cC\}$. A set of points $(x_i,y_i)$ VC-shattered by $\cL_\cC$ cannot repeat an input. If the repeated labels agree, the binary functions agree on the two points. If they differ, the labeling that requires equality with both labels is impossible. Thus the $x_i$ are distinct. Complementing every binary pattern shows that $\cL_\cC$ shatters $(x_i,y_i)$ exactly when the sequence $(x_i)$ is graph-shattered with pivot $(y_i)$. Therefore
+\[
+\VC(\cL_\cC)=\G(\cC).
+\]
+
+For a product concept $c=(c_1,\ldots,c_r)$,
+\begin{align*}
+\mathbf1\{c(x)\neq y\}
+&=\mathbf1\{\exists j:c_j(x_j)\neq y_j\}\\
+&=\bigvee_{j=1}^r\mathbf1\{c_j(x_j)\neq y_j\}.
+\end{align*}
+For heterogeneous factors, write $g_j=\G(\cC_j)$ and $g_\Sigma=\sum_jg_j$. If $m$ product examples are fixed, coordinate $j$ induces at most $\sum_{i=0}^{g_j}\binom mi$ binary patterns. When $m\geq\max_jg_j$, a shattered set obeys
+\[
+2^m\leq\prod_{j=1}^r\left(\sum_{i=0}^{g_j}\binom mi\right)
+\leq\prod_{j=1}^r\left(\frac{em}{g_j}\right)^{g_j}.
+\]
+The first inequality only counts every possible tuple of coordinate patterns. The second is Sauer's bound \citep{sauer1972}. Since $u\mapsto u\log u$ is convex and $\sum_jg_j=g_\Sigma$,
+\[
+\sum_jg_j\log g_j\geq g_\Sigma\log(g_\Sigma/r).
+\]
+Thus the preceding product is at most $(emr/g_\Sigma)^{g_\Sigma}$. Put $x=m/g_\Sigma$. We obtain $2^x\leq erx$. The function $2^x/x$ is increasing for $x>1/\log2$. At $x_0=2\log_2(3r)$,
+\[
+2^{x_0}=9r^2\geq2er\log_2(3r)=erx_0,
+\]
+where the inequality holds at $r=1$ and its margin increases with $r$. Thus $x\leq x_0$. If $m<\max_jg_j$, the same final bound is immediate because $\max_jg_j\leq g_\Sigma$.
+
+For the universal lower bound $\G(\cC^r)\geq\G(\cC)$, fix $c^0\in\cC$ and $x^0\in X$. Embed every graph-shattered input $x$ as $(x,x^0,\ldots,x^0)$ and use pivots $(y,c^0(x^0),\ldots,c^0(x^0))$. Restrict product concepts to $(c,c^0,\ldots,c^0)$.
+
+For tightness, take binary halfspace indicators in $\mathbb R^d$. Their graph dimension is $d+1$. On diagonal inputs $(x,\ldots,x)$ with pivot $(0,\ldots,0)$, the product error set is the union of the $r$ positive halfspaces. \citet{csikos2019} prove that unions of $r$ halfspaces in $\mathbb R^d$, $d\geq4$, shatter $\Omega(dr\log r)$ points. This transfers directly to product graph dimension.
+
+\subsection{Uniform-convergence curves}
+
+For a binary class of VC dimension $h\geq1$, standard expected VC bounds give universal constants $c_0,C_0>0$ such that
+\begin{equation}
+\begin{aligned}
+c_0\min\{1,\sqrt{h/n}\}&\leq\sup_Q\E\sup_f|Qf-Q_nf|\\
+&\leq C_0\min\{1,\sqrt{h/n}\}.
+\end{aligned}
+\label{eq:vc-rates}
+\end{equation}
+Apply the upper bound with $h=\G(\cC^r)\leq2gr\log_2(3r)$ and the lower bound with $h=g$. After adjusting universal constants, this gives
+\[
+\varepsilon_{\rm UC}(n\mid\cC^r)\leq C\min\{1,\sqrt{r\log(r+1)}\,\varepsilon_{\rm UC}(n\mid\cC)\}.
+\]
+
+For the reverse inequality, choose a distribution $Q$ on $X\times Y$ and embed it in the first coordinate. Put all other coordinates at $(x^0,c^0(x^0))$ and restrict the supremum over product concepts to $(c,c^0,\ldots,c^0)$. Both empirical and population product errors then equal their first-coordinate counterparts. Taking the supremum over $Q$ gives
+\[
+\varepsilon_{\rm UC}(n\mid\cC^r)\geq\varepsilon_{\rm UC}(n\mid\cC).
+\]
+
+For the halfspace construction, choose $n$ large enough that both dimensions are in the nonsaturated regime of \eqref{eq:vc-rates}. The base curve is $\Theta(\sqrt{d/n})$ and the product curve is $\Omega(\sqrt{dr\log r/n})$. Their ratio is $\Omega(\sqrt{r\log r})$.
+
+\section{Independent Finite Checks}
+\label{app:checks}
+
+The accompanying file \texttt{verification.py} performs three independent error-detection checks. First, it forms products of a six-cycle pseudocube and ternary cubes and confirms directional degrees $3$, $5$, and $8$, matching $(k+1)(k'+1)-1$. Second, it generates $25$ random finite decision games and solves both the base and tensor-product minimax linear programs. Every product value agrees with the square of the base value to tolerance $10^{-9}$. Third, it solves the deterministic two-concept games by mixed-integer linear programming and obtains
+\[
+\begin{aligned}
+V_1^{\rm det}(D,\cC)&=\frac34,&
+V_1^{\rm det}(D^2,\cC^2)&=\frac34,\\
+V_1^{\rm det}(D^3,\cC^3)&=\frac{21}{32}.&&
+\end{aligned}
+\]
+It also checks the exact random-rule expectation for $0\leq n\leq12$ and $1\leq r\leq40$. The checks use Python 3.13.4, NumPy 2.3.0, and SciPy 1.16.0. No numerical computation is used as evidence in any proof.
+
+\bibliography{references}
+
+\end{document}
