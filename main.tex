@@ -40,12 +40,7 @@
 ]
 
 \begin{abstract}
-\setlength{\emergencystretch}{1em}
-How much harder is it to learn several independent targets from product samples? We resolve three direct-product questions for multiclass and list learning. First, if $K(\cC)$ is the minimum list size for which a class is PAC learnable, then
-\[
-K(\cC_1\ot\cdots\ot\cC_r)=\prod_{j=1}^r K(\cC_j).
-\]
-The previous bounds differed exponentially in $r$. The proof strengthens the known product lemma for list Daniely--Shalev-Shwartz dimensions from $\prod_j k_j$ to $\prod_j(k_j+1)-1$ neighbors. Second, randomized fixed-marginal success obeys exact parallel repetition. Deterministic learning behaves differently. A joint deterministic learner can use the other tasks' samples as endogenous randomness and approach randomized parallel repetition, while independent deterministic learners have a strictly worse success exponent. For two copies of a two-concept problem, joint learning reduces the minimax error from $7/16$ to $1/4$. Third, if a class has graph dimension $g$, its $r$-fold product has graph dimension at most $2gr\log_2(3r)$. The logarithm is necessary even for binary halfspaces. Hence uniform convergence can deteriorate by $\Theta(\sqrt{r\log r})$, and this is the sharp worst-case law. These results resolve the minimum-list-size question, establish an exact randomized analogue and a deterministic separation for fixed marginals, and give the sharp worst-case uniform-convergence law.
+\setlength{\emergencystretch}{1em} How much harder is it to learn several independent targets from product samples? We resolve three direct-product questions for multiclass and list learning. First, if $K(\cC)$ is the minimum list size for which a class is PAC learnable, then \[ K(\cC_1\ot\cdots\ot\cC_r)=\prod_{j=1}^r K(\cC_j). \] The previous bounds differed exponentially in $r$. The proof strengthens the known product lemma for list Daniely--Shalev-Shwartz dimensions from $\prod_j k_j$ to $\prod_j(k_j+1)-1$ neighbors. Second, randomized fixed-marginal success obeys exact parallel repetition. Deterministic learning behaves differently. A joint deterministic learner can use the other tasks' samples as endogenous randomness and approach randomized parallel repetition, while independent deterministic learners have a strictly worse success exponent. For two copies of a two-concept problem, joint learning reduces the minimax error from $7/16$ to $1/4$. Third, if a class has graph dimension $g$, its $r$-fold product has graph dimension at most $2gr\log_2(3r)$. The logarithm is necessary even for binary halfspaces. Hence uniform convergence can deteriorate by $\Theta(\sqrt{r\log r})$, and this is the sharp worst-case law. These results resolve the minimum-list-size question, establish an exact randomized analogue and a deterministic separation for fixed marginals, and give the sharp worst-case uniform-convergence law.
 \end{abstract}
 
 \section{Introduction}
@@ -76,41 +71,25 @@ Graph dim. & $rg$ parameters & $\Theta(rg\log r)$ worst case \\
 \end{table}
 
 \paragraph{Exact list thresholds.} Our first observation is a sharper neighbor count. If $P_j$ is a $k_j$-pseudocube, then at one coordinate a product labeling may independently stay fixed or move in each factor. Only the all-fixed choice is excluded. This produces $\prod_j(k_j+1)-1$ product neighbors, rather than the $\prod_j k_j$ neighbors obtained by moving every factor. Combining this count with the characterization of \citet{charikar2023} proves
-\[
-K(\cC_1\ot\cdots\ot\cC_r)=\prod_jK(\cC_j)
-\]
-for all nonempty classes, including thresholds one and infinity. This closes the gap from $\prod_j(K(\cC_j)-1)$ to $\prod_jK(\cC_j)$ in the previous result. In particular, $r$ copies of any class whose minimum list size is two require exactly $2^r$ labels.
+\[ K(\cC_1\ot\cdots\ot\cC_r)=\prod_jK(\cC_j) \] for all nonempty classes, including thresholds one and infinity. This closes the gap from $\prod_j(K(\cC_j)-1)$ to $\prod_jK(\cC_j)$ in the previous result. In particular, $r$ copies of any class whose minimum list size is two require exactly $2^r$ labels.
 
 \paragraph{Parallel repetition and endogenous randomness.} Fix each input marginal and measure minimax expected error after $n$ samples. For finite problems, randomized success satisfies exact parallel repetition. The upper bound uses independent least-favorable priors. The posterior of the complete test-label vector factors, so its largest atom and its Bayes success factor as well.
 
-The source question uses deterministic learning rules, where exact multiplication is false. We construct a two-concept class on a uniform two-point domain. For one task and $n$ samples, deterministic success is $1-q$ and randomized success is $1-q/2$, where $q=2^{-(n+1)}$. A joint deterministic learner for $r$ tasks has success at least
-\[
-(1-q/2)^r-\sqrt{\frac{(r+1)\log 2}{2^{(n+1)r+1}}}.
-\]
-Thus its success exponent approaches the randomized exponent, while separate deterministic learners attain only $(1-q)^r$. The other coordinates supply observable randomness that is independent of the ambiguous target bit. At $n=1$ and $r=2$, we determine the exact joint error as $1/4$, compared with $7/16$ for separate deterministic rules.
+The source question uses deterministic learning rules, where exact multiplication is false. We construct a two-concept class on a uniform two-point domain. For one task and $n$ samples, deterministic success is $1-q$ and randomized success is $1-q/2$, where $q=2^{-(n+1)}$. A joint deterministic learner for $r$ tasks has success at least \[ (1-q/2)^r-\sqrt{\frac{(r+1)\log 2}{2^{(n+1)r+1}}}. \] Thus its success exponent approaches the randomized exponent, while separate deterministic learners attain only $(1-q)^r$. The other coordinates supply observable randomness that is independent of the ambiguous target bit. At $n=1$ and $r=2$, we determine the exact joint error as $1/4$, compared with $7/16$ for separate deterministic rules.
 
 \paragraph{Uniform convergence.} The error class of a multiclass concept class has VC dimension equal to its graph dimension. Product error is the OR of the coordinate errors. Sauer's lemma therefore gives
-\[
-\G(\cC^r)\leq 2r\G(\cC)\log_2(3r).
-\]
-This familiar union bound on growth functions is sharp in the product setting. On diagonal inputs, products of binary halfspace concepts realize unions of $r$ halfspaces. The geometric lower bound of \citet{csikos2019} then gives $\G(\cC^r)=\Omega(gr\log r)$. Standard VC theory converts the dimension law into a sharp $\Theta(\sqrt{r\log r})$ worst-case inflation of the uniform-convergence curve.
+\[ \G(\cC^r)\leq 2r\G(\cC)\log_2(3r). \] This familiar union bound on growth functions is sharp in the product setting. On diagonal inputs, products of binary halfspace concepts realize unions of $r$ halfspaces. The geometric lower bound of \citet{csikos2019} then gives $\G(\cC^r)=\Omega(gr\log r)$. Standard VC theory converts the dimension law into a sharp $\Theta(\sqrt{r\log r})$ worst-case inflation of the uniform-convergence curve.
 
 \paragraph{Related work.} The characterization of list PAC learning by $k$-DS dimension is due to \citet{charikar2023}, extending the multiclass characterization of \citet{brukhim2022}. List compression, uniform convergence, and the direct-product questions studied here were developed by \citet{hanneke2024list}. Subsequent work has sharpened the Sauer bound and sample complexity for a single list-learning problem \citep{hanneke2026sauer,pabbaraju2026}, and has studied online, private, and bandit list learning \citep{moran2023online,hanneke2025private,hanneke2026bandit}. None of these results treats product thresholds or product learning curves. Classical decision theory shows that minimax risks add for product experiments under summed coordinate losses when minimax holds in every factor \citep[Section~28.5]{polyanskiy2025}. Theorem~\ref{thm:random-product} instead concerns the nonadditive event that every coordinate is correct and proves a multiplicative success law. Our deterministic phenomenon is also distinct from multi-distribution derandomization, which asks for one predictor that works across several distributions and can be computationally hard \citep{larsen2024}. The $O(gr\log r)$ VC upper bound for unions goes back to classical VC theory \citep{blumer1989}. Its tight geometric lower bound is due to \citet{csikos2019}.
 
 \section{Setup}
 
-All domains and concept classes are nonempty. Let $\cC\subseteq Y^X$ be a concept class. For classes $\cC_j\subseteq Y_j^{X_j}$, define their product by
-\[
+All domains and concept classes are nonempty. Let $\cC\subseteq Y^X$ be a concept class. For classes $\cC_j\subseteq Y_j^{X_j}$, define their product by \[
 \begin{aligned}
 \bigotimes_{j=1}^r\cC_j=\{&(x_1,\ldots,x_r)\mapsto(c_1(x_1),\ldots,c_r(x_r)):\\
 &c_j\in\cC_j\text{ for every }j\}.
 \end{aligned}
-\]
-A $k$-list predictor maps $x$ to a subset of $Y$ of size at most $k$. A class is $k$-list PAC learnable if some learning rule has vanishing worst-case realizable error with list size at most $k$. Write
-\[
-K(\cC)=\inf\{k\geq1:\cC\text{ is $k$-list PAC learnable}\},
-\]
-with infimum infinity when the set is empty. Allowing at most $k$ labels is equivalent to the exactly-$k$ convention after harmless padding.
+\] A $k$-list predictor maps $x$ to a subset of $Y$ of size at most $k$. A class is $k$-list PAC learnable if some learning rule has vanishing worst-case realizable error with list size at most $k$. Write \[ K(\cC)=\inf\{k\geq1:\cC\text{ is $k$-list PAC learnable}\}, \] with infimum infinity when the set is empty. Allowing at most $k$ labels is equivalent to the exactly-$k$ convention after harmless padding.
 
 For $p,p'\in Y^m$, call $p'$ an $i$-neighbor of $p$ if they differ at coordinate $i$ and agree elsewhere. A finite $P\subseteq Y^m$ is a $k$-pseudocube if every $p\in P$ has at least $k$ distinct $i$-neighbors for every $i\in[m]$. The dimension $\DS_k(\cC)$ is the largest $m$ for which a restriction of $\cC$ contains a $k$-pseudocube. The central characterization is
 \begin{equation}
@@ -121,20 +100,14 @@ This holds for arbitrary label spaces \citep{charikar2023}.
 
 For fixed-marginal results, let $D$ be a distribution on $X$ and $D_c$ the law of $(X,c(X))$ for $X\sim D$. A rule sees $S\sim D_c^n$ and is tested on an independent $X\sim D$. Let $V_n^{\rm det}(D,\cC)$ and $V_n^{\rm rnd}(D,\cC)$ denote the largest worst-target success probabilities over deterministic and randomized rules. Their errors are $\varepsilon_n^\star=1-V_n^\star$. The product experiment uses $D_1\ot\cdots\ot D_r$ and receives $n$ independent product examples, which is equivalent to $r$ independent coordinate samples of size $n$.
 
-Finally, let $\cL_\cC=\{(x,y)\mapsto\mathbf1\{c(x)\neq y\}:c\in\cC\}$ be the binary error class. Its VC dimension equals the graph dimension $\G(\cC)$. The uniform-convergence curve is
-\[
-\varepsilon_{\rm UC}(n\mid\cC)=\sup_Q\E_{S\sim Q^n}\sup_{c\in\cC}|L_Q(c)-L_S(c)|.
-\]
+Finally, let $\cL_\cC=\{(x,y)\mapsto\mathbf1\{c(x)\neq y\}:c\in\cC\}$ be the binary error class. Its VC dimension equals the graph dimension $\G(\cC)$. The uniform-convergence curve is \[ \varepsilon_{\rm UC}(n\mid\cC)=\sup_Q\E_{S\sim Q^n}\sup_{c\in\cC}|L_Q(c)-L_S(c)|. \]
 
 \section{Minimum List Size Multiplies Exactly}
 
 We first strengthen the product lemma for list-DS dimensions. The improvement comes from counting every nontrivial combination of local moves.
 
 \begin{theorem}[Product pseudocubes]\label{thm:ds-product}
-For $k_1,\ldots,k_r\geq1$,
-\[
-\DS_{\prod_{j=1}^r(k_j+1)-1}\!\left(\bigotimes_{j=1}^r\cC_j\right)\geq\min_{j\in[r]}\DS_{k_j}(\cC_j).
-\]
+For $k_1,\ldots,k_r\geq1$, \[ \DS_{\prod_{j=1}^r(k_j+1)-1}\!\left(\bigotimes_{j=1}^r\cC_j\right)\geq\min_{j\in[r]}\DS_{k_j}(\cC_j). \]
 \end{theorem}
 
 \begin{proof}
@@ -146,18 +119,11 @@ Fix $p=(p_1,\ldots,p_r)\in P$ and coordinate $i$. For factor $j$, let $N_{j,i}(p
 The earlier product lemma gives only $\DS_{\prod_jk_j}\geq\min_j\DS_{k_j}$ because it counts tuples in which every factor moves \citep[Proposition 40]{hanneke2024list}. The all-but-one count in Theorem~\ref{thm:ds-product} is exactly what the threshold problem needs.
 
 \begin{theorem}[Exact list threshold]\label{thm:list-threshold}
-For concept classes on nonempty domains, with multiplication in $\mathbb N\cup\{\infty\}$,
-\[
-K\!\left(\bigotimes_{j=1}^r\cC_j\right)=\prod_{j=1}^rK(\cC_j).
-\]
+For concept classes on nonempty domains, with multiplication in $\mathbb N\cup\{\infty\}$, \[ K\!\left(\bigotimes_{j=1}^r\cC_j\right)=\prod_{j=1}^rK(\cC_j). \]
 \end{theorem}
 
 \begin{proof}
-First suppose every $a_j=K(\cC_j)$ is finite and at least two. Minimality and \eqref{eq:characterization} give $\DS_{a_j-1}(\cC_j)=\infty$. Theorem~\ref{thm:ds-product} gives
-\[
-\DS_{\prod_ja_j-1}\!\left(\bigotimes_j\cC_j\right)=\infty.
-\]
-The product is therefore not $(\prod_ja_j-1)$-list learnable. Conversely, run an $a_j$-list learner in every coordinate and output the Cartesian product of their lists.
+First suppose every $a_j=K(\cC_j)$ is finite and at least two. Minimality and \eqref{eq:characterization} give $\DS_{a_j-1}(\cC_j)=\infty$. Theorem~\ref{thm:ds-product} gives \[ \DS_{\prod_ja_j-1}\!\left(\bigotimes_j\cC_j\right)=\infty. \] The product is therefore not $(\prod_ja_j-1)$-list learnable. Conversely, run an $a_j$-list learner in every coordinate and output the Cartesian product of their lists.
 
 It remains to cover thresholds one and infinity. Fix concepts and inputs in all factors except $j$. Feeding their fixed labeled examples to any product learner and projecting its output pairs onto coordinate $j$ gives a marginal learner with no larger list. Thus the product threshold is at least every marginal threshold, and an infinite marginal threshold forces an infinite product threshold. Applying this projection and the preceding argument to the factors with threshold at least two completes all cases.
 \end{proof}
@@ -171,26 +137,16 @@ If $K(\cC)=k<\infty$, then $K(\cC^r)=k^r$. In particular, a product of $r$ class
 We next study the fixed-marginal curve from Open Question 2 of \citet{hanneke2024list}. Randomized rules admit an exact answer.
 
 \begin{theorem}[Randomized parallel repetition]\label{thm:random-product}
-Suppose all domains, label spaces, and classes are finite. For every $n\geq0$,
-\[
-V_n^{\rm rnd}\!\left(\bigotimes_{j=1}^rD_j,\bigotimes_{j=1}^r\cC_j\right)=\prod_{j=1}^rV_n^{\rm rnd}(D_j,\cC_j).
-\]
-Equivalently, the product error is $1-\prod_j(1-\varepsilon_{n,j}^{\rm rnd})$.
+Suppose all domains, label spaces, and classes are finite. For every $n\geq0$, \[ V_n^{\rm rnd}\!\left(\bigotimes_{j=1}^rD_j,\bigotimes_{j=1}^r\cC_j\right)=\prod_{j=1}^rV_n^{\rm rnd}(D_j,\cC_j). \] Equivalently, the product error is $1-\prod_j(1-\varepsilon_{n,j}^{\rm rnd})$.
 \end{theorem}
 
 \begin{proof}
-Independent optimal marginal rules give the lower bound. For the reverse bound, view coordinate $j$ as a finite decision game. By minimax, there is a least-favorable prior $\pi_j$ on $\cC_j$ whose Bayes success equals $v_j=V_n^{\rm rnd}(D_j,\cC_j)$. Let $O_j=(S_j,X_j)$ be the observed sample and test input. Bayes success under $\pi_j$ is
-\[
-\E_{O_j}\max_{y_j}\Prb_{\pi_j}\{c_j(X_j)=y_j\mid O_j\}=v_j.
-\]
-Use the product prior $\bigotimes_j\pi_j$ against a joint rule. Conditional on $O=(O_1,\ldots,O_r)$, the posterior test labels are independent. Therefore
-\[
+Independent optimal marginal rules give the lower bound. For the reverse bound, view coordinate $j$ as a finite decision game. By minimax, there is a least-favorable prior $\pi_j$ on $\cC_j$ whose Bayes success equals $v_j=V_n^{\rm rnd}(D_j,\cC_j)$. Let $O_j=(S_j,X_j)$ be the observed sample and test input. Bayes success under $\pi_j$ is \[ \E_{O_j}\max_{y_j}\Prb_{\pi_j}\{c_j(X_j)=y_j\mid O_j\}=v_j. \] Use the product prior $\bigotimes_j\pi_j$ against a joint rule. Conditional on $O=(O_1,\ldots,O_r)$, the posterior test labels are independent. Therefore \[
 \begin{aligned}
 &\max_{y_1,\ldots,y_r}\Prb\{c_j(X_j)=y_j\ \forall j\mid O\}\\
 &\qquad=\prod_j\max_{y_j}\Prb\{c_j(X_j)=y_j\mid O_j\}.
 \end{aligned}
-\]
-Taking expectations gives Bayes success $\prod_jv_j$, which upper bounds the joint minimax success.
+\] Taking expectations gives Bayes success $\prod_jv_j$, which upper bounds the joint minimax success.
 \end{proof}
 
 The finite assumption isolates the statistical point from measurable minimax issues. The same argument applies whenever the coordinate games satisfy minimax and admit regular conditional posteriors.
@@ -203,15 +159,7 @@ The deterministic convention in the source question changes the answer. Theorem~
 The left side runs deterministic rules separately. The right side enlarges the class of joint rules. Both inequalities can be strict in their informative comparison, as the next class shows.
 
 \begin{theorem}[Endogenous derandomization]\label{thm:det-product}
-Let $X=Y=\{0,1\}$, let $D$ be uniform, and let $\cC=\{c_0,c_1\}$, where $c_b(0)=0$ and $c_b(1)=b$. Put $q=2^{-(n+1)}$, $N=2^{(n+1)r}$, and
-\[
-\Delta_{n,r}=\sqrt{\frac{(r+1)\log 2}{2N}}.
-\]
-Then
-\[
-V_n^{\rm det}(D,\cC)=1-q,\qquad V_n^{\rm rnd}(D,\cC)=1-q/2.
-\]
-For every $r\geq1$, the joint deterministic value satisfies
+Let $X=Y=\{0,1\}$, let $D$ be uniform, and let $\cC=\{c_0,c_1\}$, where $c_b(0)=0$ and $c_b(1)=b$. Put $q=2^{-(n+1)}$, $N=2^{(n+1)r}$, and \[ \Delta_{n,r}=\sqrt{\frac{(r+1)\log 2}{2N}}. \] Then \[ V_n^{\rm det}(D,\cC)=1-q,\qquad V_n^{\rm rnd}(D,\cC)=1-q/2. \] For every $r\geq1$, the joint deterministic value satisfies
 \begin{equation}
 \begin{aligned}
 (1-q/2)^r-\Delta_{n,r}&\leq V_n^{\rm det}(D^r,\cC^r),\\
@@ -230,11 +178,7 @@ A target bit is ambiguous exactly when all $n$ training inputs are zero and the 
 For the lower bound, draw one deterministic joint rule at random by assigning independent fair guesses to every observable ambiguous context. For a fixed target vector, there are $N=2^{(n+1)r}$ equally likely input contexts. Their success indicators are independent because the complete input context is observed, and their mean is $(1-q/2)^r$. Hoeffding's inequality and a union bound over the $2^r$ target vectors show that some deterministic rule has minimum success at least the left side of \eqref{eq:det-bound}. Full details are in Supplement Section~B.
 \end{proof}
 
-The additive term in \eqref{eq:det-bound} is exponentially smaller than $(1-q/2)^r$. Consequently
-\[
-\lim_{r\to\infty}-\frac1r\log V_n^{\rm det}(D^r,\cC^r)=-\log(1-q/2),
-\]
-whereas independent deterministic learning has exponent $-\log(1-q)>-\log(1-q/2)$.
+The additive term in \eqref{eq:det-bound} is exponentially smaller than $(1-q/2)^r$. Consequently \[ \lim_{r\to\infty}-\frac1r\log V_n^{\rm det}(D^r,\cC^r)=-\log(1-q/2), \] whereas independent deterministic learning has exponent $-\log(1-q)>-\log(1-q/2)$.
 
 The smallest nontrivial case already has a visible gap.
 
@@ -260,26 +204,16 @@ This improvement is not free information about any target. It is deterministic b
 Product error is a union operation. This yields a universal upper bound and imports a tight geometric lower bound.
 
 \begin{theorem}[Product graph dimension]\label{thm:graph}
-Let $\cC_j$ be nonempty with $1\leq g_j=\G(\cC_j)<\infty$, and put $g_\Sigma=\sum_jg_j$. Then
-\[
-\max_jg_j\leq\G\!\left(\bigotimes_{j=1}^r\cC_j\right)\leq2g_\Sigma\log_2(3r).
-\]
-In particular, $\G(\cC^r)\leq2gr\log_2(3r)$ when $\G(\cC)=g$.
-Moreover, for every $d\geq4$ there is a binary class with $g=d+1$ such that
-\[
-\G(\cC^r)=\Omega(dr\log r).
-\]
+Let $\cC_j$ be nonempty with $1\leq g_j=\G(\cC_j)<\infty$, and put $g_\Sigma=\sum_jg_j$. Then \[ \max_jg_j\leq\G\!\left(\bigotimes_{j=1}^r\cC_j\right)\leq2g_\Sigma\log_2(3r). \] In particular, $\G(\cC^r)\leq2gr\log_2(3r)$ when $\G(\cC)=g$. Moreover, for every $d\geq4$ there is a binary class with $g=d+1$ such that \[ \G(\cC^r)=\Omega(dr\log r). \]
 \end{theorem}
 
 \begin{proof}
-The product error class consists of ORs of $r$ coordinate error classes. If it shatters $m\geq\max_jg_j$ points, Sauer's lemma and convexity of $u\log u$ bound its number of dichotomies by
-\[
+The product error class consists of ORs of $r$ coordinate error classes. If it shatters $m\geq\max_jg_j$ points, Sauer's lemma and convexity of $u\log u$ bound its number of dichotomies by \[
 \begin{aligned}
 2^m&\leq\prod_{j=1}^r\left(\frac{em}{g_j}\right)^{g_j}
 \leq\left(\frac{emr}{g_\Sigma}\right)^{g_\Sigma}.
 \end{aligned}
-\]
-Write $m=g_\Sigma x$. Then $2^x\leq erx$. Since $2^x/x$ is increasing beyond $x=2$ and $(3r)^2\geq2er\log_2(3r)$, we obtain $x\leq2\log_2(3r)$. The lower bound follows by fixing one concept in every coordinate except the factor being embedded.
+\] Write $m=g_\Sigma x$. Then $2^x\leq erx$. Since $2^x/x$ is increasing beyond $x=2$ and $(3r)^2\geq2er\log_2(3r)$, we obtain $x\leq2\log_2(3r)$. The lower bound follows by fixing one concept in every coordinate except the factor being embedded.
 
 For sharpness, let $\cC$ be the binary indicators of halfspaces in $\mathbb R^d$, whose VC and graph dimensions are $d+1$. Restrict product inputs to $(x,\ldots,x)$ and use the all-zero pivot label. Product errors then realize unions of $r$ halfspaces. \citet{csikos2019} construct a set of $\Omega(dr\log r)$ points shattered by these unions.
 \end{proof}
